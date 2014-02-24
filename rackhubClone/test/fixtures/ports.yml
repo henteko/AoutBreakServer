@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  local_port: 1
+  docker_port: 1
+  container: 
+
+two:
+  local_port: 1
+  docker_port: 1
+  container: 

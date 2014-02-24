@@ -1,0 +1,7 @@
+<%= form_tag users_path, :method => :put do %>
+  Name: admin
+  <br />
+  New Password: <%= password_field 'user', 'new_password' %>
+  <br />
+  <%= submit_tag 'Update', :class => 'btn btn-success' %>
+<% end %>

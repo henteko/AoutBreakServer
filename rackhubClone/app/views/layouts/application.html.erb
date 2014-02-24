@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <%= favicon_link_tag %>
+    <title>AoutBreakServer</title>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href=<%= root_path %>>AoutBreakServer</a>
+          <div class="container nav-collapse">
+            <ul class="nav pull-right">
+              <% if @admin.nil? %>
+                <li><%= link_to 'Login', login_users_path %></li>
+              <% else %>
+                <li><a href="#" id="create">Container Create</span></a>
+                <li class="divider-vertical"></li>
+                <li><%= link_to 'User Edit', edit_users_path %></li>
+                <li class="divider-vertical"></li>
+                <li><%= link_to 'Logout', logout_users_path %></li>
+              <% end %>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <% [:success, :error, :info].each do |level| %>
+        <% unless flash[level].blank? %>
+          <div class="alert alert-<%= flash_class(level) %>">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= content_tag :p, flash[level] %>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="row" style="text-align:center;">
+        <%= yield %>
+      </div><!--/row-->
+
+      <footer>
+      <p>&copy; henteko 2014</p>
+      </footer>
+
+    </body>
+  </html>

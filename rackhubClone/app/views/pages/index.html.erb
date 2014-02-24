@@ -1,0 +1,82 @@
+<div id="contents">
+  <h1>Containers</h1>
+  <div class="well">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Port</th>
+          <th>Clone</th>
+          <th>Merge</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @containers.each_with_index do |con, index| %>
+          <tr>
+            <% if con.children.count > 0 %>
+              <td rowspan=<%= con.children.count + 1 %>><%= index + 1 %></td>
+            <% else %>
+              <% if con.parent.nil? %>
+                <td><%= index + 1 %></td>
+              <% end %>
+            <% end %>
+            <td><%= con.name %></td>
+            <td>
+              <% con.ports.each do |port| %>
+                <% if port.local_port == 22 %>
+                  <div>ssh user@<%= con.name + '.' + Container::BASE_HOST %> -p <%= port.docker_port %></div>
+                <% else %>
+                  <div><%= con.name + '.' + Container::BASE_HOST + ':' + port.local_port.to_s %> => <%= port.docker_local_port %></div>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <% if con.parent.nil? && con.children.count == 0 %>
+                <%= form_tag docker_master_clone_pages_path, :method => :post, :class => 'cloneForm' do %>
+                  <%= hidden_field 'container', 'name', :value => con.name %>
+                  <%= submit_tag 'Clone', :confirm => 'clone ok?', :class => 'btn btn-info' %>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <% unless con.parent.nil? %>
+                <%= form_tag docker_master_merge_pages_path, :method => :post do %>
+                  <%= hidden_field 'container', 'name', :value => con.name %>
+                  <%= submit_tag 'Merge', :confirm => 'merge ok?', :class => 'btn btn-warning' %>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= form_tag docker_kill_pages_path, :method => :post do %>
+                <%= hidden_field 'container', 'name', :value => con.name %>
+                <%= submit_tag 'Delete', :confirm => 'delete ok?', :class => 'btn btn-danger' %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div id="create-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Container Create</h3>
+    </div>
+    <div class="modal-body">
+      <%= form_tag docker_create_pages_path, :method => :post, :id => 'createForm' do %>
+        <%= text_field 'container', 'name', :placeholder => 'example' %>.<%= Container::BASE_HOST %>
+        <br />
+        <%= text_field 'container', 'repo_url', :placeholder => 'github.com:example/example.git' %>
+        <br />
+        <%= submit_tag 'Create', :class => 'btn btn-success' %>
+      <% end %>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+  </div>
+</div>

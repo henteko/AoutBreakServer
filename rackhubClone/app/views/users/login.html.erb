@@ -1,0 +1,7 @@
+<%= form_tag users_path, :method => :post do %>
+  Name: <%= text_field 'user', 'name', :placeholder => 'example' %>
+  <br />
+  Password: <%= password_field 'user', 'password' %>
+  <br />
+  <%= submit_tag 'Login', :class => 'btn btn-success' %>
+<% end %>
