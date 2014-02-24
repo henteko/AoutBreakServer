@@ -10,7 +10,7 @@ class Container < ActiveRecord::Base
   REDIS_PORT = 6379
   BASE_HOST = Rails.application.config.base_host
 
-  IMAGE_NAME = "henteko/test"
+  IMAGE_NAME = "aoutbreakserver/image"
 
   def master_merge
     parent_con = self.parent
